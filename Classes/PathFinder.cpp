@@ -37,8 +37,8 @@ const vector<Graph::Node*> Graph::HeuristicSearch::getFullPath(Node &goal) {
     while (curNode != begin) {
         edges = curNode->getEdges();
         for (auto edgeIter = edges->begin(); edgeIter != edges->end(); ++edgeIter) {
-            if (edgeIter->getType() == Graph::EdgeType::Backward ||
-                edgeIter->getType() == Graph::EdgeType::BiDirect) {
+            if (edgeIter->getType() == Graph::Node::EdgeType::Backward ||
+                edgeIter->getType() == Graph::Node::EdgeType::BiDirect) {
 
                 destNode = edgeIter->getDest();
                 destCost = *costs[*destNode];
@@ -87,8 +87,8 @@ void Graph::HeuristicSearch::findPath(const Graph::Node& begin, const Graph::Nod
         tuple<double, const Graph::Node*> oldNode, newNode;
         const Graph::Node* curDest;
         for (auto edgeIter = edges->begin(); edgeIter != edges->end(); ++edgeIter) {
-            if (edgeIter->getType() == Graph::EdgeType::Forward ||
-                edgeIter->getType() == Graph::EdgeType::BiDirect) {
+            if (edgeIter->getType() == Graph::Node::EdgeType::Forward ||
+                edgeIter->getType() == Graph::Node::EdgeType::BiDirect) {
 
                 curDest = edgeIter->getDest();
                 oldNode = make_tuple(*costs[*curDest], curDest);

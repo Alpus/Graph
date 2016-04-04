@@ -17,8 +17,6 @@ using std::make_tuple;
 
 class Graph {
 public:
-    enum class EdgeType {Backward=-1, BiDirect=0, Forward=1};
-
     class Exeptions;
     class Node;
 
@@ -67,6 +65,8 @@ public:
 
 class Graph::Node {
 public:
+    enum class EdgeType {Backward=-1, BiDirect=0, Forward=1};
+
     class Edge;
 
     Node(const uint32_t id);
@@ -74,7 +74,7 @@ public:
     const uint32_t getId() const;
     const vector<Edge>* const getEdges() const;
 
-    void addEdge(Node &dest, const double cost = 1, Graph::EdgeType type = Graph::EdgeType::BiDirect);
+    void addEdge(Node &dest, const double cost = 1, Graph::Node::EdgeType type = Graph::Node::EdgeType::BiDirect);
 
 private:
     uint32_t id;
@@ -83,19 +83,20 @@ private:
 
 class Graph::Node::Edge {
 public:
-    Edge(Graph::Node& from, Graph::Node& dest, const double cost=0, Graph::EdgeType type=Graph::EdgeType::BiDirect);
+    Edge(Graph::Node& from, Graph::Node& dest, const double cost=0,
+         Graph::Node::EdgeType type=Graph::Node::EdgeType::BiDirect);
 
     const double getCost() const;
     Graph::Node* const getFrom() const;
     Graph::Node* const getDest() const;
-    const Graph::EdgeType getType() const;
+    const Graph::Node::EdgeType getType() const;
 
 private:
     double cost;
     Graph::Node* from;
     Graph::Node* dest;
 
-    Graph::EdgeType type;
+    Graph::Node::EdgeType type;
 };
 
 #endif //PATHFINDER_GRAPH_H

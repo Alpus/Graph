@@ -36,13 +36,13 @@ const uint32_t Graph::getDimension() const {
 }
 
 void Graph::addDirectedEdge(const uint32_t from, const uint32_t to, const double cost) {
-    (*this)[from]->addEdge(*(*this)[to], cost, Graph::EdgeType::Forward);
-    (*this)[to]->addEdge(*(*this)[from], cost, Graph::EdgeType::Backward);
+    (*this)[from]->addEdge(*(*this)[to], cost, Graph::Node::EdgeType::Forward);
+    (*this)[to]->addEdge(*(*this)[from], cost, Graph::Node::EdgeType::Backward);
 }
 
 void Graph::addBiDirectedEdge(const uint32_t from, const uint32_t to, const double cost) {
-    (*this)[from]->addEdge(*(*this)[to], cost, Graph::EdgeType::BiDirect);
-    (*this)[to]->addEdge(*(*this)[from], cost, Graph::EdgeType::BiDirect);
+    (*this)[from]->addEdge(*(*this)[to], cost, Graph::Node::EdgeType::BiDirect);
+    (*this)[to]->addEdge(*(*this)[from], cost, Graph::Node::EdgeType::BiDirect);
 }
 
 Graph::Node* const Graph::operator[](const uint32_t number) {
@@ -94,12 +94,12 @@ const uint32_t Graph::Node::getId() const {
     return id;
 }
 
-void Graph::Node::addEdge(Graph::Node &dest, const double cost, Graph::EdgeType type) {
+void Graph::Node::addEdge(Graph::Node &dest, const double cost, Graph::Node::EdgeType type) {
     edges.push_back(Graph::Node::Edge(*this, dest, cost, type));
 }
 
 Graph::Node::Edge::Edge(Graph::Node& from, Graph::Node& dest,
-                        const double cost, Graph::EdgeType type): cost(cost), from(&from),
+                        const double cost, Graph::Node::EdgeType type): cost(cost), from(&from),
                                                                   dest(&dest), type(type){}
 
 
@@ -115,7 +115,7 @@ Graph::Node* const Graph::Node::Edge::getDest() const {
     return dest;
 }
 
-const Graph::EdgeType Graph::Node::Edge::getType() const {
+const Graph::Node::EdgeType Graph::Node::Edge::getType() const {
     return type;
 }
 
