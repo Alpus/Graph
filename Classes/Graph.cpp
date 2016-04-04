@@ -2,50 +2,42 @@
 #include "../Headers/PathFinder.h"
 
 Graph::Graph(const uint32_t nodesNumber,
-             const vector<tuple<uint32_t, uint32_t>> &rawEdges,
-             const bool isDirected) {
-    vector<tuple<uint32_t, uint32_t, double>> newRawEdges(nodesNumber);
-    for (auto rawEdge: rawEdges) {
-        newRawEdges.push_back(make_tuple(get<0>(rawEdge), get<1>(rawEdge), 1));
-    }
-    Graph(nodesNumber, newRawEdges, isDirected);
-}
-
-Graph::Graph(const uint32_t nodesNumber,
              const vector<tuple<uint32_t, uint32_t, double>> &rawEdges,
              const bool isDirected) {
+    infiniteNode = new Graph::Node(numeric_limits<uint32_t>::infinity());
     nodes.reserve(nodesNumber);
     for (uint32_t i = 0; i < nodesNumber; ++i) {
         nodes.push_back(Node(i));
     }
     for (auto rawEdge: rawEdges) {
         if (isDirected) {
-            addDirectedEdge(get<0>(rawEdge), get<1>(rawEdge), get<2>(rawEdge));
+            addDirectedEdge(&this->nodes[get<0>(rawEdge)], &this->nodes[get<1>(rawEdge)], get<2>(rawEdge));
         } else {
-            addBiDirectedEdge(get<0>(rawEdge), get<1>(rawEdge), get<2>(rawEdge));
+            addBiDirectedEdge(&this->nodes[get<0>(rawEdge)], &this->nodes[get<1>(rawEdge)], get<2>(rawEdge));
         }
     }
 }
 
 Graph::~Graph() {
     delete pathFinder;
+    delete infiniteNode;
 }
 
-const uint32_t Graph::getDimension() const {
+const uint32_t Graph::getSize() const {
     return uint32_t(nodes.size());
 }
 
-void Graph::addDirectedEdge(const uint32_t from, const uint32_t to, const double cost) {
-    (*this)[from]->addEdge(*(*this)[to], cost, Graph::Node::EdgeType::Forward);
-    (*this)[to]->addEdge(*(*this)[from], cost, Graph::Node::EdgeType::Backward);
+void Graph::addDirectedEdge(const Node* const from, const Node* const to, const double cost) {
+    this->nodes[from->getId()].addEdge(this->nodes[to->getId()], cost, Graph::EdgeType::Forward);
+    this->nodes[to->getId()].addEdge(this->nodes[from->getId()], cost, Graph::EdgeType::Backward);
 }
 
-void Graph::addBiDirectedEdge(const uint32_t from, const uint32_t to, const double cost) {
-    (*this)[from]->addEdge(*(*this)[to], cost, Graph::Node::EdgeType::BiDirect);
-    (*this)[to]->addEdge(*(*this)[from], cost, Graph::Node::EdgeType::BiDirect);
+void Graph::addBiDirectedEdge(const Node* const from, const Node* const to, const double cost) {
+    this->nodes[from->getId()].addEdge(this->nodes[to->getId()], cost, Graph::EdgeType::BiDirect);
+    this->nodes[to->getId()].addEdge(this->nodes[from->getId()], cost, Graph::EdgeType::BiDirect);
 }
 
-Graph::Node* const Graph::operator[](const uint32_t number) {
+const Graph::Node* const Graph::operator[](const uint32_t number) const {
     return &nodes[number];
 }
 
@@ -57,20 +49,11 @@ void Graph::setPathFinder(const string &pathFinderName) {
     }
 }
 
-void Graph::findPath(const uint32_t begin, const string& pathFinderName, const uint32_t goal) {
-    if (!pathFinderName.empty()) {
-        setPathFinder(pathFinderName);
-    }
+void Graph::findPath(const Node *const begin, const Node *const goal) {
     if (pathFinder == NULL) {
         throw Exeptions::NoPathfinderSet();
     }
-    Node* goalNode;
-    if (goal == numeric_limits<uint32_t >::infinity()) {
-        goalNode = new Node(goal);
-    } else {
-        goalNode = (*this)[goal];
-    }
-    pathFinder->findPath(*(*this)[begin], *goalNode);
+    pathFinder->findPath(*begin, *goal);
 }
 
 const double Graph::getPathCost(const uint32_t goal) {
@@ -80,11 +63,11 @@ const double Graph::getPathCost(const uint32_t goal) {
     return pathFinder->getPathCost(*(*this)[goal]);
 }
 
-const vector<Graph::Node *> Graph::getFullPath(const uint32_t goal) {
+const vector<const Graph::Node*> Graph::getFullPath(const uint32_t goal) {
     if (pathFinder == NULL) {
         throw Exeptions::NoPathfinderSet();
     }
-    return pathFinder->getFullPath(*(*this)[goal]);
+    return pathFinder->getFullPath(this->nodes[goal]);
 }
 
 
@@ -94,32 +77,38 @@ const uint32_t Graph::Node::getId() const {
     return id;
 }
 
-void Graph::Node::addEdge(Graph::Node &dest, const double cost, Graph::Node::EdgeType type) {
-    edges.push_back(Graph::Node::Edge(*this, dest, cost, type));
+void Graph::Node::addEdge(Graph::Node &dest, const double cost, Graph::EdgeType type) {
+    edges.push_back(Graph::Edge (*this, dest, cost, type));
 }
 
-Graph::Node::Edge::Edge(Graph::Node& from, Graph::Node& dest,
-                        const double cost, Graph::Node::EdgeType type): cost(cost), from(&from),
+Graph::Edge ::Edge(Graph::Node& from, Graph::Node& dest,
+                        const double cost, Graph::EdgeType type): cost(cost), from(&from),
                                                                   dest(&dest), type(type){}
 
+const Graph::Edge *const Graph::Node::operator[](const uint32_t number) const {
+    return &edges[number];
+}
 
-const double Graph::Node::Edge::getCost() const {
+const double Graph::Edge ::getCost() const {
     return cost;
 }
 
-Graph::Node* const Graph::Node::Edge::getFrom() const {
+const Graph::Node* const Graph::Edge ::getFrom() const {
     return from;
 }
 
-Graph::Node* const Graph::Node::Edge::getDest() const {
+const Graph::Node* const Graph::Edge ::getDest() const {
     return dest;
 }
 
-const Graph::Node::EdgeType Graph::Node::Edge::getType() const {
+const Graph::EdgeType Graph::Edge ::getType() const {
     return type;
 }
 
-const vector<Graph::Node::Edge>* const Graph::Node::getEdges() const {
+const vector<Graph::Edge>* const Graph::Node::getEdges() const {
     return &edges;
 }
 
+const Graph::Node* const Graph::getInfiniteNode() const {
+    return infiniteNode;
+}

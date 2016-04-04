@@ -18,21 +18,35 @@ using std::make_tuple;
 class Graph {
 public:
     class Exeptions;
-    class Node;
+    class Edge;
+    enum class EdgeType {Backward=-1, BiDirect=0, Forward=1};
 
-    Graph(const uint32_t nodesNumber, const vector<tuple<uint32_t, uint32_t>>& raw_edges=
-          vector<tuple<uint32_t, uint32_t>>(),
-          const bool isDirected=false);
+    class Node {
+    public:
+        Node(const uint32_t id);
+
+        const uint32_t getId() const;
+        virtual const vector<Edge>* const getEdges() const;
+
+        const Edge* const operator[](const uint32_t number) const;
+
+        virtual void addEdge(Node &dest, const double cost = 0, EdgeType type = EdgeType::BiDirect);
+
+    private:
+        uint32_t id;
+        vector<Edge> edges;
+    };
+
     Graph(const uint32_t nodesNumber, const vector<tuple<uint32_t, uint32_t, double>>& raw_edges=
           vector<tuple<uint32_t, uint32_t, double>>(),
           const bool isDirected=false);
     ~Graph();
 
-    const uint32_t getDimension() const;
+    const uint32_t getSize() const;
 
-    Node* const operator[](const uint32_t number);
-    void addDirectedEdge(const uint32_t from, const uint32_t to, const double cost=1);
-    void addBiDirectedEdge(const uint32_t from, const uint32_t to, const double cost=1);
+    const Node* const operator[](const uint32_t number) const ;
+    void addDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
+    void addBiDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
 
     // Get string with name of PathFinder class.
     // Allowed values:
@@ -40,10 +54,11 @@ public:
     // - DijkstraSearch
     void setPathFinder(const string&);
 
-    void findPath(const uint32_t begin, const string& pathFinderName="",
-                  const uint32_t goal=numeric_limits<uint32_t >::infinity());
+    void findPath(const Node *const begin, const Node *const end);
     const double getPathCost(const uint32_t goal);
-    const vector<Graph::Node*> getFullPath(const uint32_t goal);
+    const vector<const Graph::Node*> getFullPath(const uint32_t goal);
+
+    virtual const Node* const getInfiniteNode() const;
 
 protected:
     class PathFinder;
@@ -52,6 +67,8 @@ protected:
 
     vector<Node> nodes;
     PathFinder* pathFinder = NULL;
+
+    Node* infiniteNode;
 };
 
 class Graph::Exeptions {
@@ -61,42 +78,25 @@ public:
         NoSuchPathFinderName(const string& PathFinder) {}
     };
     class NoPathfinderSet{};
+    class EndlessSearch{};
 };
 
-class Graph::Node {
-public:
-    enum class EdgeType {Backward=-1, BiDirect=0, Forward=1};
-
-    class Edge;
-
-    Node(const uint32_t id);
-
-    const uint32_t getId() const;
-    const vector<Edge>* const getEdges() const;
-
-    void addEdge(Node &dest, const double cost = 1, Graph::Node::EdgeType type = Graph::Node::EdgeType::BiDirect);
-
-private:
-    uint32_t id;
-    vector<Edge> edges;
-};
-
-class Graph::Node::Edge {
+class Graph::Edge {
 public:
     Edge(Graph::Node& from, Graph::Node& dest, const double cost=0,
-         Graph::Node::EdgeType type=Graph::Node::EdgeType::BiDirect);
+         Graph::EdgeType type=Graph::EdgeType::BiDirect);
 
     const double getCost() const;
-    Graph::Node* const getFrom() const;
-    Graph::Node* const getDest() const;
-    const Graph::Node::EdgeType getType() const;
+    const Graph::Node* const getFrom() const;
+    const Graph::Node* const getDest() const;
+    const Graph::EdgeType getType() const;
 
 private:
     double cost;
     Graph::Node* from;
     Graph::Node* dest;
 
-    Graph::Node::EdgeType type;
+    Graph::EdgeType type;
 };
 
 #endif //PATHFINDER_GRAPH_H

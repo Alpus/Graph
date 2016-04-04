@@ -5,7 +5,6 @@
 #include <set>
 
 using std::set;
-
 using std::reverse;
 
 const double Graph::PathFinder::getPathCost(const Graph::Node& goal) {
@@ -13,7 +12,7 @@ const double Graph::PathFinder::getPathCost(const Graph::Node& goal) {
 }
 
 Graph::PathFinder::Costs::Costs(const Graph &graph) {
-    costs.assign(graph.getDimension(), numeric_limits<double>::infinity());
+    costs.assign(graph.getSize(), numeric_limits<double>::infinity());
 }
 
 Graph::PathFinder::PathFinder(Graph& graph): graph(&graph), costs(Costs(graph)) {}
@@ -22,23 +21,23 @@ double* const Graph::PathFinder::Costs::operator[](const Graph::Node& node) {
     return &costs[node.getId()];
 }
 
-const vector<Graph::Node*> Graph::HeuristicSearch::getFullPath(Node &goal) {
+const vector<const Graph::Node*> Graph::HeuristicSearch::getFullPath(Node &goal) {
     if (getPathCost(goal) == numeric_limits<double>::infinity()) {
-        return vector<Graph::Node*>();
+        return vector<const Graph::Node*>();
     }
-    vector<Graph::Node*> pathOrder;
+    vector<const Graph::Node*> pathOrder;
     pathOrder.push_back(&goal);
 
     const Graph::Node* curNode = &goal;
 
-    const vector<Graph::Node::Edge>* edges;
+    const vector<Graph::Edge>* edges;
     double destCost;
-    Graph::Node* destNode;
+    const Graph::Node* destNode;
     while (curNode != begin) {
         edges = curNode->getEdges();
         for (auto edgeIter = edges->begin(); edgeIter != edges->end(); ++edgeIter) {
-            if (edgeIter->getType() == Graph::Node::EdgeType::Backward ||
-                edgeIter->getType() == Graph::Node::EdgeType::BiDirect) {
+            if (edgeIter->getType() == Graph::EdgeType::Backward ||
+                edgeIter->getType() == Graph::EdgeType::BiDirect) {
 
                 destNode = edgeIter->getDest();
                 destCost = *costs[*destNode];
@@ -60,11 +59,13 @@ const bool operator<(tuple<double, const Graph::Node*> first,
     return get<0>(first) < get<0>(second);
 }
 
-const double Graph::HeuristicSearch::getMinCost(const Graph::Node::Edge &edge) {
+const double Graph::HeuristicSearch::getMinCost(const Graph::Edge &edge) {
     return *costs[*edge.getFrom()] + edge.getCost();
 }
 
 void Graph::HeuristicSearch::findPath(const Graph::Node& begin, const Graph::Node& goal) {
+    uint64_t errCounter = 0;
+
     this->begin = &begin;
     set<tuple<double, const Graph::Node*>> open;
 
@@ -74,8 +75,12 @@ void Graph::HeuristicSearch::findPath(const Graph::Node& begin, const Graph::Nod
 
     const Graph::Node* curNode;
     double curCost;
-    const vector<Graph::Node::Edge>* edges;
+    const vector<Graph::Edge>* edges;
     while (!open.empty()) {
+        ++errCounter;
+        if (errCounter > 2 * graph->getSize()) {
+            throw Graph::Exeptions::EndlessSearch();
+        }
         curNode = get<1>(*open.begin());
         open.erase(open.begin());
 
@@ -87,8 +92,8 @@ void Graph::HeuristicSearch::findPath(const Graph::Node& begin, const Graph::Nod
         tuple<double, const Graph::Node*> oldNode, newNode;
         const Graph::Node* curDest;
         for (auto edgeIter = edges->begin(); edgeIter != edges->end(); ++edgeIter) {
-            if (edgeIter->getType() == Graph::Node::EdgeType::Forward ||
-                edgeIter->getType() == Graph::Node::EdgeType::BiDirect) {
+            if (edgeIter->getType() == Graph::EdgeType::Forward ||
+                edgeIter->getType() == Graph::EdgeType::BiDirect) {
 
                 curDest = edgeIter->getDest();
                 oldNode = make_tuple(*costs[*curDest], curDest);

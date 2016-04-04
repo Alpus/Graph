@@ -31,10 +31,12 @@ int main() {
     vector<tuple<uint32_t, uint32_t, double>> edges;
     readWeightedGraph(&n, &edges);
     Graph graph(n, edges);
-    graph.findPath(0, "DijkstraSearch");
+    graph.setPathFinder("DijkstraSearch");
+    graph.findPath(graph[0], graph.getInfiniteNode());
     cout << graph.getPathCost(4) << endl;
     for (auto node: graph.getFullPath(4)) {
         cout << node->getId() << " ";
     }
+
     return 0;
 }

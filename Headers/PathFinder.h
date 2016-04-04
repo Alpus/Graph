@@ -18,7 +18,7 @@ public:
     virtual void findPath(const Graph::Node& begin, const Graph::Node& goal) = 0;
 
     const double getPathCost(const Graph::Node& goal);
-    virtual const vector<Graph::Node*> getFullPath(Node &goal)=0;
+    virtual const vector<const Graph::Node*> getFullPath(Node &goal)=0;
 protected:
     Costs costs;
 
@@ -26,9 +26,9 @@ protected:
     const Graph::Node* begin;
 };
 
-class Graph::HeuristicSearch : protected PathFinder {
+class Graph::HeuristicSearch : PathFinder {
 protected:
-    const double getMinCost(const Graph::Node::Edge&);
+    const double getMinCost(const Graph::Edge &);
 
     virtual const double getHeuristic(const Graph::Node&)=0;
 
@@ -36,10 +36,10 @@ public:
     HeuristicSearch(Graph& graph) : PathFinder(graph) {};
 
     void findPath(const Graph::Node& begin, const Graph::Node& goal);
-    const vector<Graph::Node*> getFullPath(Node &goal);
+    const vector<const Graph::Node*> getFullPath(Node &goal);
 };
 
-class Graph::DijkstraSearch : private HeuristicSearch {
+class Graph::DijkstraSearch : HeuristicSearch {
     const double getHeuristic(const Graph::Node&);
 
 public:
