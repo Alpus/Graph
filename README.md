@@ -1,15 +1,15 @@
 # Graph Library
 ###### Alexander Pushin
-#### Implemented features:
+### Implemented features:
  * Class "Graph"
  * Dijkstra algorithm
 
 ---
-#### Decription:
+### Decription:
 This library is realization of class Graph. The main part of this lib is PathFinder class that implements different algorithms.
 
-#### Graph API
-##### Graph creation
+### Graph API
+#### Graph creation
 To create graph you should use constructor. It receives 3 arguments.
  1. Number of nodes.
   * Description: Number of nodes in graph.
@@ -61,7 +61,7 @@ Graph graph(3);
 graph.addDirectedEdge(graph[0], graph[1], 1);
 graph.addDirectedEdge(graph[0], graph[2], 2);
 ```
-##### Graph information
+#### Graph information
 You can get graph size by method `Graph.getSize()`. It will return `const std::uint32_t` value with number of nodes in graph.
 
 Example:
@@ -87,7 +87,7 @@ Example:
 const Graph::Node* node = graph.getInfiniteNode();  // node id equals to numeric_limits<uint32_t>::infinity()
 ```
 
-##### Node
+#### Node
 You can get id of node using `Node.getId()`. That will return `const std::uint32_t` value with node id.
 
 Example:
@@ -110,7 +110,7 @@ If you need only one edge, you can use `Edge[std::uint32_t]`. Then you get `cons
 const Graph::Edge* edge = (*graph[0])[0]; // edges contain list of edges connected with node 0 (backward 0 - 1 with cost 1, backward 0 - 2 with cost 2).
 ```
 
-##### Edge
+#### Edge
 You can get edge cost by method `Edge.getCost()`. It will return `const double` value with edge cost.
 
 ```cpp
@@ -133,7 +133,7 @@ You can get type of edge by method `Edge.getType()`. It will return `const Graph
 const Graph::EdgeType type  = edge->getType(); // type == Graph::EdgeType::Backward
 ```
 
-##### PathFinder
+#### PathFinder
 To use PathFinder you need to call `Graph.setPathFinder(const string&)` with name of PathFinder as argument.
 
 Allowed names:
