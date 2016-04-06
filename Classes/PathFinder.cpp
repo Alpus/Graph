@@ -96,11 +96,11 @@ void Graph::HeuristicSearch::findPath(const Graph::Node& begin, const Graph::Nod
                 edgeIter->getType() == Graph::EdgeType::BiDirect) {
 
                 curDest = edgeIter->getDest();
-                oldNode = make_tuple(*costs[*curDest], curDest);
+                oldNode = make_tuple(*costs[*curDest] + getHeuristic(*curDest), curDest);
                 newNode = make_tuple(getMinCost(*edgeIter) + getHeuristic(*curNode), curDest);
                 if (newNode < oldNode) {
                     open.erase(oldNode);
-                    *costs[*curDest] = get<0>(newNode);
+                    *costs[*curDest] = getMinCost(*edgeIter);
                     open.insert(newNode);
                 }
             }
