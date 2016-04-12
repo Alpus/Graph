@@ -134,38 +134,38 @@ const Graph::EdgeType type  = edge->getType(); // type == Graph::EdgeType::Backw
 ```
 
 #### PathFinder
-To use PathFinder you need to call `Graph.setPathFinder(const string&)` with name of PathFinder as argument.
+To use some path finder you need to call constructor of needed class with graph object as argument. For example `DijkstraSearch(Graph&)`.
 
-Allowed names:
+Allowed classes:
  * DijkstraSearch 
   * **No negative loops**
   * Min cost path.
   * From one to all.
   * O(E log(N))
 
-Then you need to call `Graph.findPath()` that received 2 arguments:
- 1. Number of begin node
+Then you need to call `pathFinder.findPath()` that received 2 arguments:
+ 1. Begin node
     * Type: `const Graph::Node& `
- 2. Number of goal node
+ 2. Goal node
   * Type: `const Graph::Node& `
   * Note: You are available to send `Graph.getInfiniteNode()` if you want to find path to all nodes and algorithm support it.
     
 ```cpp
 // Find path
-graph.setPathFinder("DijkstraSearch");
-graph.findPath(graph[0], graph.getInfiniteNode()); // path from node 0 to all other nodes is founded
+DijkstraSearch pathFinder(graph);
+pathFinder.findPath(*graph[0], *graph.getInfiniteNode()); // path from node 0 to all other nodes is founded
 ```
 
-After that you can get cost of path to node with some id by method `Graph.getPathCost(std::uint32_t)`. It will return `double` cost of path that algorithm founded (and `std::numeric_limits<double>::infinity()` if algorithm did not achieve this node).
+After that you can get cost of path to node with some id by method `pathFinder.getPathCost(std::uint32_t)`. It will return `double` cost of path that algorithm founded (and `std::numeric_limits<double>::infinity()` if algorithm did not achieve this node).
 
 ```cpp
 // Get path cost
-double cost = graph.getPathCost(1); // cost == 1
+double cost = pathFinder.getPathCost(1); // cost == 1
 ```
 
-And you can get order of nodes that algorithm found by method `Graph.getFullPath()`. It will return `const vector<Graph::Node*>` list with reached nodes in path order.
+And you can get order of nodes that algorithm found by method `pathFinder.getFullPath()`. It will return `const vector<Graph::Node*>` list with reached nodes in path order.
 
 ```cpp
 // Get path order
-const vector<const Graph::Node*> path = graph.getFullPath(1); // path contain nodes with id (0, 1).
+const vector<const Graph::Node*> path = pathFinder.getFullPath(1); // path contain nodes with id (0, 1).
 ```
