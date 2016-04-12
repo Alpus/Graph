@@ -19,7 +19,6 @@ Graph::Graph(const uint32_t nodesNumber,
 }
 
 Graph::~Graph() {
-    delete pathFinder;
     delete infiniteNode;
 }
 
@@ -39,35 +38,6 @@ void Graph::addBiDirectedEdge(const Node* const from, const Node* const to, cons
 
 const Graph::Node* const Graph::operator[](const uint32_t number) const {
     return &nodes[number];
-}
-
-void Graph::setPathFinder(const string &pathFinderName) {
-    if (pathFinderName == "DijkstraSearch") {
-        pathFinder = (PathFinder *) new DijkstraSearch(*this);
-    } else {
-        throw Exeptions::NoSuchPathFinderName(pathFinderName);
-    }
-}
-
-void Graph::findPath(const Node *const begin, const Node *const goal) {
-    if (pathFinder == NULL) {
-        throw Exeptions::NoPathfinderSet();
-    }
-    pathFinder->findPath(*begin, *goal);
-}
-
-const double Graph::getPathCost(const uint32_t goal) {
-    if (pathFinder == NULL) {
-        throw Exeptions::NoPathfinderSet();
-    }
-    return pathFinder->getPathCost(*(*this)[goal]);
-}
-
-const vector<const Graph::Node*> Graph::getFullPath(const uint32_t goal) {
-    if (pathFinder == NULL) {
-        throw Exeptions::NoPathfinderSet();
-    }
-    return pathFinder->getFullPath(this->nodes[goal]);
 }
 
 

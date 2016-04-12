@@ -7,21 +7,21 @@
 using std::set;
 using std::reverse;
 
-const double Graph::PathFinder::getPathCost(const Graph::Node& goal) {
+const double PathFinder::getPathCost(const Graph::Node& goal) {
     return *costs[goal];
 }
 
-Graph::PathFinder::Costs::Costs(const Graph &graph) {
+PathFinder::Costs::Costs(const Graph &graph) {
     costs.assign(graph.getSize(), numeric_limits<double>::infinity());
 }
 
-Graph::PathFinder::PathFinder(Graph& graph): graph(&graph), costs(Costs(graph)) {}
+PathFinder::PathFinder(Graph& graph): graph(&graph), costs(Costs(graph)) {}
 
-double* const Graph::PathFinder::Costs::operator[](const Graph::Node& node) {
+double* const PathFinder::Costs::operator[](const Graph::Node& node) {
     return &costs[node.getId()];
 }
 
-const vector<const Graph::Node*> Graph::HeuristicSearch::getFullPath(Node &goal) {
+const vector<const Graph::Node*> HeuristicSearch::getFullPath(const Graph::Node &goal) {
     if (getPathCost(goal) == numeric_limits<double>::infinity()) {
         return vector<const Graph::Node*>();
     }
@@ -59,11 +59,11 @@ const bool operator<(tuple<double, const Graph::Node*> first,
     return get<0>(first) < get<0>(second);
 }
 
-const double Graph::HeuristicSearch::getMinCost(const Graph::Edge &edge) {
+const double HeuristicSearch::getMinCost(const Graph::Edge &edge) {
     return *costs[*edge.getFrom()] + edge.getCost();
 }
 
-void Graph::HeuristicSearch::findPath(const Graph::Node& begin, const Graph::Node& goal) {
+void HeuristicSearch::findPath(const Graph::Node& begin, const Graph::Node& goal) {
     uint64_t errCounter = 0;
 
     this->begin = &begin;
@@ -108,7 +108,7 @@ void Graph::HeuristicSearch::findPath(const Graph::Node& begin, const Graph::Nod
     }
 }
 
-const double Graph::DijkstraSearch::getHeuristic(const Graph::Node &node) {
+const double DijkstraSearch::getHeuristic(const Graph::Node &node) {
     return 0;
 }
 

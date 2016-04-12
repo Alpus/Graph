@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "Headers/Graph.h"
+#include "Headers/PathFinder.h"
 #include <iostream>
 using std::cin;
 using std::cout;
@@ -31,10 +32,10 @@ int main() {
     vector<tuple<uint32_t, uint32_t, double>> edges;
     readWeightedGraph(&n, &edges);
     Graph graph(n, edges);
-    graph.setPathFinder("DijkstraSearch");
-    graph.findPath(graph[0], graph.getInfiniteNode());
-    cout << graph.getPathCost(4) << endl;
-    for (auto node: graph.getFullPath(4)) {
+    DijkstraSearch pathFinder(graph);
+    pathFinder.findPath(*graph[0], *graph.getInfiniteNode());
+    cout << pathFinder.getPathCost(*graph[4]) << endl;
+    for (auto node: pathFinder.getFullPath(*graph[4])) {
         cout << node->getId() << " ";
     }
 

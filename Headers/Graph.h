@@ -48,26 +48,10 @@ public:
     void addDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
     void addBiDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
 
-    // Get string with name of PathFinder class.
-    // Allowed values:
-    //
-    // - DijkstraSearch
-    void setPathFinder(const string&);
-
-    void findPath(const Node *const begin, const Node *const end);
-    const double getPathCost(const uint32_t goal);
-    const vector<const Graph::Node*> getFullPath(const uint32_t goal);
-
     virtual const Node* const getInfiniteNode() const;
 
 protected:
-    class PathFinder;
-    class HeuristicSearch;
-    class DijkstraSearch;
-
     vector<Node> nodes;
-    PathFinder* pathFinder = NULL;
-
     Node* infiniteNode;
 };
 

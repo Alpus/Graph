@@ -3,7 +3,7 @@
 
 #include "Graph.h"
 
-class Graph::PathFinder {
+class PathFinder {
 public:
     class Costs {
         vector<double> costs;
@@ -18,7 +18,7 @@ public:
     virtual void findPath(const Graph::Node& begin, const Graph::Node& goal) = 0;
 
     const double getPathCost(const Graph::Node& goal);
-    virtual const vector<const Graph::Node*> getFullPath(Node &goal)=0;
+    virtual const vector<const Graph::Node*> getFullPath(const Graph::Node &goal)=0;
 protected:
     Costs costs;
 
@@ -26,20 +26,19 @@ protected:
     const Graph::Node* begin;
 };
 
-class Graph::HeuristicSearch : PathFinder {
+class HeuristicSearch : public PathFinder {
 protected:
     const double getMinCost(const Graph::Edge &);
-
     virtual const double getHeuristic(const Graph::Node&)=0;
 
 public:
     HeuristicSearch(Graph& graph) : PathFinder(graph) {};
 
     void findPath(const Graph::Node& begin, const Graph::Node& goal);
-    const vector<const Graph::Node*> getFullPath(Node &goal);
+    const vector<const Graph::Node*> getFullPath(const Graph::Node &goal);
 };
 
-class Graph::DijkstraSearch : HeuristicSearch {
+class DijkstraSearch : public HeuristicSearch {
     const double getHeuristic(const Graph::Node&);
 
 public:
