@@ -10,15 +10,15 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-void readWeightedGraph(uint32_t* const nodeNumber, vector<tuple<uint32_t, uint32_t, double>>* const edges) {
+void readWeightedGraph(uint64_t* const nodeNumber, vector<tuple<uint64_t, uint64_t, double>>* const edges) {
     cout << "Number of nodes: ";
     cin >> *nodeNumber;
-    uint32_t edgeNumber;
+    uint64_t edgeNumber;
     cout << "Number of edges: ";
     cin >> edgeNumber;
     cout << "Edges: \n";
 
-    uint32_t from, to;
+    uint64_t from, to;
     double cost;
     for (int i = 0; i < edgeNumber; ++i) {
         cin >> from >> to >> cost;
@@ -28,8 +28,8 @@ void readWeightedGraph(uint32_t* const nodeNumber, vector<tuple<uint32_t, uint32
 
 int main() {
     freopen ("input","r", stdin);
-    uint32_t n = 0;
-    vector<tuple<uint32_t, uint32_t, double>> edges;
+    uint64_t n = 0;
+    vector<tuple<uint64_t, uint64_t, double>> edges;
     readWeightedGraph(&n, &edges);
     Graph graph(n, edges);
     DijkstraSearch pathFinder(graph);

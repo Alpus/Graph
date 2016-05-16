@@ -42,7 +42,7 @@ class DijkstraSearch : public HeuristicSearch {
     const double getHeuristic(const Graph::Node&);
 
 public:
-    DijkstraSearch(Graph& graph) : HeuristicSearch(graph){};
+    DijkstraSearch(Graph& graph) : HeuristicSearch(graph) {};
 };
 
 

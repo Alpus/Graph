@@ -23,28 +23,29 @@ public:
 
     class Node {
     public:
-        Node(const uint32_t id);
+        Node(const uint64_t id);
 
-        const uint32_t getId() const;
-        virtual const vector<Edge>* const getEdges() const;
+        const uint64_t getId() const;
+        const vector<Edge>* const getEdges() const;
 
-        const Edge* const operator[](const uint32_t number) const;
+        virtual const Edge* const operator[](const uint64_t number) const;
 
-        virtual void addEdge(Node &dest, const double cost = 0, EdgeType type = EdgeType::BiDirect);
+        void addEdge(Node* const dest, const double cost = 0, EdgeType type = EdgeType::BiDirect);
 
     private:
-        uint32_t id;
+        uint64_t id;
         vector<Edge> edges;
     };
 
-    Graph(const uint32_t nodesNumber, const vector<tuple<uint32_t, uint32_t, double>>& raw_edges=
-          vector<tuple<uint32_t, uint32_t, double>>(),
+    Graph();
+    Graph(const uint64_t nodesNumber, const vector<tuple<uint64_t, uint64_t, double>>& raw_edges=
+          vector<tuple<uint64_t, uint64_t, double>>(),
           const bool isDirected=false);
     ~Graph();
 
-    const uint32_t getSize() const;
+    const uint64_t getSize() const;
 
-    const Node* const operator[](const uint32_t number) const ;
+    const Node* const operator[](const uint64_t number) const ;
     void addDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
     void addBiDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
 
@@ -52,7 +53,7 @@ public:
 
 protected:
     vector<Node> nodes;
-    Node* infiniteNode;
+    Node* infiniteNode = new Graph::Node(numeric_limits<uint64_t>::infinity());;
 };
 
 class Graph::Exeptions {
