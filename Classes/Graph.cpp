@@ -37,7 +37,7 @@ void Graph::addBiDirectedEdge(const Node* const from, const Node* const to, cons
     this->nodes[to->getId()].addEdge(&(this->nodes[from->getId()]), cost, Graph::EdgeType::BiDirect);
 }
 
-const Graph::Node* const Graph::operator[](const uint64_t number) const {
+const Graph::Node* Graph::operator[](const uint64_t number) const {
     return &nodes[number];
 }
 
@@ -83,4 +83,10 @@ const vector<Graph::Edge>* const Graph::Node::getEdges() const {
 const Graph::Node* const Graph::getInfiniteNode() const {
     return infiniteNode;
 }
+
+const Graph::Node* Graph::getNodeById(const uint64_t number) {
+    this->operator[](number);
+}
+
+
 

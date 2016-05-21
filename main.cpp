@@ -5,6 +5,7 @@ using namespace std;
 
 #include "Headers/Graph.h"
 #include "Headers/PathFinder.h"
+#include "Headers/XMLGridGraphParser.h"
 #include <iostream>
 using std::cin;
 using std::cout;
@@ -27,17 +28,26 @@ void readWeightedGraph(uint64_t* const nodeNumber, vector<tuple<uint64_t, uint64
 }
 
 int main() {
-    freopen ("input","r", stdin);
-    uint64_t n = 0;
-    vector<tuple<uint64_t, uint64_t, double>> edges;
-    readWeightedGraph(&n, &edges);
-    Graph graph(n, edges);
+//    freopen ("Inputs/graph_test","r", stdin);
+//    uint64_t n = 0;
+//    vector<tuple<uint64_t, uint64_t, double>> edges;
+//    readWeightedGraph(&n, &edges);
+//    Graph graph(n, edges);
+//    DijkstraSearch pathFinder(graph);
+//    pathFinder.findPath(*graph[0], *graph.getInfiniteNode());
+//    cout << pathFinder.getPathCost(*graph[4]) << endl;
+//    for (auto node: pathFinder.getFullPath(*graph[4])) {
+//        cout << node->getId() << " ";
+//    }
+
+
+    XMLGridGraphParser data("/home/alpus/Work/Course_work/Implementation/Inputs/Starcraft_movingai.com_/EbonLakes/small_lakes.xml");
+    GridGraph graph(data.getWidth(), data.getHeight(), data.getGrid());
     DijkstraSearch pathFinder(graph);
-    pathFinder.findPath(*graph[0], *graph.getInfiniteNode());
+    pathFinder.findPath(*graph.getCellByCoords(data.getStartX(), data.getStartY()), *graph.getInfiniteNode());
     cout << pathFinder.getPathCost(*graph[4]) << endl;
     for (auto node: pathFinder.getFullPath(*graph[4])) {
         cout << node->getId() << " ";
     }
-
     return 0;
 }

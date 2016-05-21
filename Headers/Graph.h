@@ -45,7 +45,8 @@ public:
 
     const uint64_t getSize() const;
 
-    const Node* const operator[](const uint64_t number) const ;
+    const Node* operator[](const uint64_t number) const;
+    const Node* getNodeById(const uint64_t number);
     void addDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
     void addBiDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
 
