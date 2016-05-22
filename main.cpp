@@ -31,7 +31,7 @@ void readWeightedGraph(uint64_t* const nodeNumber, vector<tuple<uint64_t, uint64
 }
 
 int main() {
-    XMLGridGraphParser data("/home/alpus/Work/Course_work/Implementation/Inputs/DragonAge-Starcraft-somemaps/Starcraft_movingai.com_/Cauldron/3796273.xml");
+    XMLGridGraphParser data("Inputs/DragonAge-Starcraft-somemaps/Starcraft_movingai.com_/Cauldron/3796273.xml");
     GridGraph graph(data.getWidth(), data.getHeight(), data.getGrid());
     AStar pathFinder(&graph, Heuristic::chebyshevDistance);
 
