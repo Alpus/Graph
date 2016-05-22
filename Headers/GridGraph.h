@@ -27,9 +27,11 @@ public:
     GridGraph(int32_t width, int32_t height, const vector<vector<double>>* const nodeCosts);
     int32_t getWidth() const;
     int32_t getHeight() const;
-    const Cell* getCellByCoords(const int32_t x, const int32_t y) const;
+    const Cell* getCellByCoords(const int32_t height, const int32_t width) const;
     const uint64_t getSize() const;
     const Cell* operator[](const uint64_t number) const;
+    virtual const Cell* const getInfiniteNode() const;
+
 private:
     const vector<Cell::Coord> neighCoordDiff = {Cell::Coord(int32_t(-1), int32_t(-1)),
                                                 Cell::Coord(int32_t(0), int32_t(-1)),
@@ -45,6 +47,7 @@ private:
     int32_t height;
     GridGraph::Cell *const getCellByCoords(const Cell::Coord* const) const;
     vector<Cell> nodes;
+    Cell* infiniteNode;
 };
 
 

@@ -4,8 +4,6 @@
 #include <algorithm>
 #include <set>
 
-#include <iostream>
-
 using std::set;
 using std::reverse;
 
@@ -77,7 +75,6 @@ void HeuristicSearch::findPath(const Graph::Node* const begin, const Graph::Node
     set<tuple<double, const Graph::Node*>, bool(*)(
             tuple<double, const Graph::Node*>,
             tuple<double, const Graph::Node*>)> open(
-
             [](tuple<double, const Graph::Node*> first,
                 tuple<double, const Graph::Node*> second){
             if (get<0>(first) == get<0>(second)) {
@@ -101,8 +98,6 @@ void HeuristicSearch::findPath(const Graph::Node* const begin, const Graph::Node
         }
         curNode = get<1>(*open.begin());
 
-        std::cerr << std::endl << curNode->getId() << std::endl;
-
         open.erase(open.begin());
 
         if (curNode == goal) {
@@ -117,10 +112,9 @@ void HeuristicSearch::findPath(const Graph::Node* const begin, const Graph::Node
                 edgeIter.getType() == Graph::EdgeType::BiDirect) {
 
                 curDest = edgeIter.getDest();
-                std::cerr << curDest->getId() << " ";
 
                 double curDestCost = *costs[curDest];
-                double curDestHeuristic = getHeuristic(curDest);
+                double curDestHeuristic = getHeuristic(curDest, goal);
                 if (curDestCost + curDestHeuristic < curDestCost) {
                     oldNode = make_tuple(std::numeric_limits<double>::infinity(), curDest);
                 } else {
@@ -137,21 +131,20 @@ void HeuristicSearch::findPath(const Graph::Node* const begin, const Graph::Node
                 if (newNode < oldNode) {
                     open.erase(oldNode);
                     *costs[curDest] = getMinCost(&edgeIter);
-                    std::cerr << std::endl << get<1>(newNode)->getId() << " " << std::endl;
-                    for (auto it = open.begin(); it != open.end(); ++it) {
-                        std::cerr << get<1>(*it)->getId() << " ";
-                    }
                     open.insert(newNode);
-                    for (auto it = open.begin(); it != open.end(); ++it) {
-                        std::cerr << get<1>(*it)->getId() << " ";
-                    }
                 }
             }
         }
     }
 }
 
-const double DijkstraSearch::getHeuristic(const Graph::Node* const node) {
+const double DijkstraSearch::getHeuristic(const Graph::Node* const from, const Graph::Node* const to) {
     return 0;
+}
+
+
+const double AStar::getHeuristic(const Graph::Node* const from, const Graph::Node* const to) {
+    return heuristic(dynamic_cast<GridGraph::Cell*>(const_cast<Graph::Node*>(from)),
+                     dynamic_cast<GridGraph::Cell*>(const_cast<Graph::Node*>(to)));
 }
 

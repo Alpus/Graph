@@ -1,5 +1,5 @@
 #include "../Headers/GridGraph.h"
-#include <cmath>
+#include <math.h>
 #include <iostream>
 
 GridGraph::Cell::Cell(const int32_t height, const int32_t width, GridGraph* graph):
@@ -39,7 +39,10 @@ const vector<GridGraph::Cell*> GridGraph::getAllValidNeighs(GridGraph::Cell* con
     return ans;
 }
 
-GridGraph::GridGraph(int32_t width, int32_t height, const vector<vector<double>>* const nodeCosts): Graph(), width(width), height(height) {
+GridGraph::GridGraph(int32_t width, int32_t height, const vector<vector<double>>* const nodeCosts): Graph(),
+                                                                                                    width(width),
+                                                                                                    height(height) {
+    infiniteNode = new Cell(numeric_limits<int32_t>::max(), numeric_limits<int32_t>::max(), this);
     nodes.reserve(height * width + 1);
     grid.assign(height, vector<Cell*>());
     for (int32_t i = 0; i < height; ++i) {
@@ -64,13 +67,12 @@ int32_t GridGraph::getHeight() const {
     return height;
 }
 
-const GridGraph::Cell *GridGraph::getCellByCoords(const int32_t x, const int32_t y) const {
-    GridGraph::Cell::Coord coord(x, y);
+const GridGraph::Cell *GridGraph::getCellByCoords(const int32_t height, const int32_t width) const {
+    GridGraph::Cell::Coord coord(height, width);
     return this->getCellByCoords(&coord);
 }
 
 GridGraph::Cell *const GridGraph::getCellByCoords(const Cell::Coord *const coord) const {
-    std::cerr << grid[coord->height][coord->width]->getId() << std::endl;
     return this->grid[coord->height][coord->width];
 }
 
@@ -82,14 +84,8 @@ const GridGraph::Cell *GridGraph::operator[](const uint64_t number) const {
     return &nodes[number];
 }
 
-
-
-
-
-
-
-
-
-
+const GridGraph::Cell *const GridGraph::getInfiniteNode() const {
+    return infiniteNode;
+}
 
 

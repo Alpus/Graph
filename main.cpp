@@ -4,8 +4,10 @@
 using namespace std;
 
 #include "Headers/Graph.h"
+#include "Headers/GridGraph.h"
 #include "Headers/PathFinder.h"
 #include "Headers/XMLGridGraphParser.h"
+#include "Headers/Heuristic.h"
 #include <iostream>
 using std::cin;
 using std::cout;
@@ -40,13 +42,19 @@ int main() {
 //        cout << node->getId() << " ";
 //    }
 
-    XMLGridGraphParser data("/home/alpus/Work/Course_work/Implementation/Inputs/Starcraft_movingai.com_/EbonLakes/small_lakes.xml");
+    freopen ("Output","w", stdout);
+    XMLGridGraphParser data("/home/alpus/Work/Course_work/Implementation/Inputs/DragonAge-Starcraft-somemaps/Starcraft_movingai.com_/ArcticStation/3768988.xml");
     GridGraph graph(data.getWidth(), data.getHeight(), data.getGrid());
-    DijkstraSearch pathFinder(&graph);
-    pathFinder.findPath(graph.getCellByCoords(data.getStartX(), data.getStartY()), graph.getInfiniteNode());
-    cout << *pathFinder.getPathCost(graph[11]) << endl;
-    for (auto node: pathFinder.getFullPath(graph[11])) {
+    AStar pathFinder(&graph, Heuristic::chebyshevDistance);
+
+    const GridGraph::Cell* startCell = graph.getCellByCoords(data.getStartHeight(), data.getStartWidth());
+    const GridGraph::Cell* endCell = graph.getCellByCoords(data.getEndHeight(), data.getEndWidth());
+    pathFinder.findPath(startCell, endCell);
+
+    cout << *pathFinder.getPathCost(endCell) << endl;
+    for (auto node: pathFinder.getFullPath(endCell)) {
         cout << node->getId() << " ";
     }
+    cout << endl;
     return 0;
 }

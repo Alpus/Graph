@@ -25,7 +25,7 @@ public:
     public:
         Node(const uint64_t id);
 
-        virtual const uint64_t getId() const;
+        const uint64_t getId() const;
         const vector<Edge>* const getEdges() const;
 
         virtual const Edge* const operator[](const uint64_t number) const;
@@ -53,7 +53,7 @@ public:
     void addDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
     void addBiDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
 
-    const Node* const getInfiniteNode() const;
+    virtual const Node* const getInfiniteNode() const;
     vector<Node> nodes;
 
 protected:

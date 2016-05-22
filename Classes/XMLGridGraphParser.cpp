@@ -15,10 +15,10 @@ XMLGridGraphParser::XMLGridGraphParser(const string path) {
     pugi::xml_node map = doc.child("root").child("map");
     width = strtoul(map.child_value("width"), NULL, 10);
     height = strtoul(map.child_value("height"), NULL, 10);
-    startX = strtoul(map.child_value("startx"), NULL, 10);
-    startY = strtoul(map.child_value("starty"), NULL, 10);
-    endX = strtoul(map.child_value("finishx"), NULL, 10);
-    endY = strtoul(map.child_value("finishy"), NULL, 10);
+    startHeight = strtoul(map.child_value("startx"), NULL, 10);
+    startWidth = strtoul(map.child_value("starty"), NULL, 10);
+    endHeight = strtoul(map.child_value("finishx"), NULL, 10);
+    endWidth = strtoul(map.child_value("finishy"), NULL, 10);
     pugi::xml_node rows = map.child("grid");
 
     grid.assign(height, vector<double>());
@@ -33,7 +33,7 @@ XMLGridGraphParser::XMLGridGraphParser(const string path) {
         while (i < width) {
             ssin >> number;
             if (number == "0") {
-                grid[row_number].push_back(0);
+                grid[row_number].push_back(1);
             } else {
                 grid[row_number].push_back(numeric_limits<double>::infinity());
             }
@@ -55,20 +55,20 @@ const int32_t XMLGridGraphParser::getHeight() const {
     return height;
 }
 
-const int32_t XMLGridGraphParser::getStartX() const {
-    return startX;
+const int32_t XMLGridGraphParser::getStartHeight() const {
+    return startHeight;
 }
 
-const int32_t XMLGridGraphParser::getStartY() const {
-    return startY;
+const int32_t XMLGridGraphParser::getStartWidth() const {
+    return startWidth;
 }
 
-const int32_t XMLGridGraphParser::getEndX() const {
-    return endX;
+const int32_t XMLGridGraphParser::getEndHeight() const {
+    return endHeight;
 }
 
-const int32_t XMLGridGraphParser::getEndY() const {
-    return endY;
+const int32_t XMLGridGraphParser::getEndWidth() const {
+    return endWidth;
 }
 
 
