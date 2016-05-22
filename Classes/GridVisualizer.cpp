@@ -29,7 +29,6 @@ void GridVisualizer::addPath(const vector<const Graph::Node *>* const path) {
 }
 
 void GridVisualizer::drawImage() const {
-    namedWindow("Map", WINDOW_AUTOSIZE);
     imshow("Map", img);
     waitKey(0);
 }
