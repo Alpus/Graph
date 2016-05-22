@@ -26,11 +26,11 @@ XMLGridGraphParser::XMLGridGraphParser(const string path) {
 
     int row_number = 0;
 
-    for (pugi::xml_node row = rows.first_child(); row_number < height; row = rows.next_sibling()) {
+    for (pugi::xml_node row = rows.child("row"); row; row = row.next_sibling("row")) {
         stringstream ssin(row.child_value());
 
         int i = 0;
-        while (ssin.good() && i < width) {
+        while (i < width) {
             ssin >> number;
             if (number == "0") {
                 grid[row_number].push_back(0);
@@ -43,31 +43,31 @@ XMLGridGraphParser::XMLGridGraphParser(const string path) {
     }
 }
 
-const vector<vector<double>> XMLGridGraphParser::getGrid() const {
-    return grid;
+const vector<vector<double>>* XMLGridGraphParser::getGrid() const {
+    return &grid;
 }
 
-const uint32_t XMLGridGraphParser::getWidth() const {
+const int32_t XMLGridGraphParser::getWidth() const {
     return width;
 }
 
-const uint32_t XMLGridGraphParser::getHeight() const {
+const int32_t XMLGridGraphParser::getHeight() const {
     return height;
 }
 
-const uint32_t XMLGridGraphParser::getStartX() const {
+const int32_t XMLGridGraphParser::getStartX() const {
     return startX;
 }
 
-const uint32_t XMLGridGraphParser::getStartY() const {
+const int32_t XMLGridGraphParser::getStartY() const {
     return startY;
 }
 
-const uint32_t XMLGridGraphParser::getEndX() const {
+const int32_t XMLGridGraphParser::getEndX() const {
     return endX;
 }
 
-const uint32_t XMLGridGraphParser::getEndY() const {
+const int32_t XMLGridGraphParser::getEndY() const {
     return endY;
 }
 

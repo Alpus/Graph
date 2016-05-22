@@ -10,21 +10,21 @@
 class XMLGridGraphParser {
 public:
     XMLGridGraphParser(const string path);
-    const vector<vector<double>> getGrid() const;
-    const uint32_t getWidth() const;
-    const uint32_t getHeight() const;
-    const uint32_t getStartX() const;
-    const uint32_t getStartY() const;
-    const uint32_t getEndX() const;
-    const uint32_t getEndY() const;
+    const vector<vector<double>>* getGrid() const;
+    const int32_t getWidth() const;
+    const int32_t getHeight() const;
+    const int32_t getStartX() const;
+    const int32_t getStartY() const;
+    const int32_t getEndX() const;
+    const int32_t getEndY() const;
 private:
     vector<vector<double>> grid;
-    uint32_t width;
-    uint32_t height;
-    uint32_t startX;
-    uint32_t startY;
-    uint32_t endX;
-    uint32_t endY;
+    int32_t width;
+    int32_t height;
+    int32_t startX;
+    int32_t startY;
+    int32_t endX;
+    int32_t endY;
 };
 
 

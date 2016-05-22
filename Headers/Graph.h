@@ -7,7 +7,7 @@
 #include <limits>
 #include <string>
 using std::vector;
-using std::uint32_t;
+using std::int32_t;
 using std::uint64_t;
 using std::tuple;
 using std::numeric_limits;
@@ -25,16 +25,19 @@ public:
     public:
         Node(const uint64_t id);
 
-        const uint64_t getId() const;
+        virtual const uint64_t getId() const;
         const vector<Edge>* const getEdges() const;
 
         virtual const Edge* const operator[](const uint64_t number) const;
 
         void addEdge(Node* const dest, const double cost = 0, EdgeType type = EdgeType::BiDirect);
 
-    private:
+    protected:
         uint64_t id;
         vector<Edge> edges;
+
+    private:
+
     };
 
     Graph();
@@ -43,18 +46,18 @@ public:
           const bool isDirected=false);
     ~Graph();
 
-    const uint64_t getSize() const;
+    virtual const uint64_t getSize() const;
 
-    const Node* operator[](const uint64_t number) const;
+    virtual const Node* operator[](const uint64_t number) const;
     const Node* getNodeById(const uint64_t number);
     void addDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
     void addBiDirectedEdge(const Node* const from, const Node* const to, const double cost=0);
 
-    virtual const Node* const getInfiniteNode() const;
+    const Node* const getInfiniteNode() const;
+    vector<Node> nodes;
 
 protected:
-    vector<Node> nodes;
-    Node* infiniteNode = new Graph::Node(numeric_limits<uint64_t>::infinity());;
+    Node* infiniteNode;
 };
 
 class Graph::Exeptions {
@@ -69,7 +72,7 @@ public:
 
 class Graph::Edge {
 public:
-    Edge(Graph::Node& from, Graph::Node& dest, const double cost=0,
+    Edge(Graph::Node* const from, Graph::Node* const dest, const double cost=0,
          Graph::EdgeType type=Graph::EdgeType::BiDirect);
 
     const double getCost() const;

@@ -40,13 +40,12 @@ int main() {
 //        cout << node->getId() << " ";
 //    }
 
-
     XMLGridGraphParser data("/home/alpus/Work/Course_work/Implementation/Inputs/Starcraft_movingai.com_/EbonLakes/small_lakes.xml");
     GridGraph graph(data.getWidth(), data.getHeight(), data.getGrid());
-    DijkstraSearch pathFinder(graph);
-    pathFinder.findPath(*graph.getCellByCoords(data.getStartX(), data.getStartY()), *graph.getInfiniteNode());
-    cout << pathFinder.getPathCost(*graph[4]) << endl;
-    for (auto node: pathFinder.getFullPath(*graph[4])) {
+    DijkstraSearch pathFinder(&graph);
+    pathFinder.findPath(graph.getCellByCoords(data.getStartX(), data.getStartY()), graph.getInfiniteNode());
+    cout << *pathFinder.getPathCost(graph[11]) << endl;
+    for (auto node: pathFinder.getFullPath(graph[11])) {
         cout << node->getId() << " ";
     }
     return 0;
