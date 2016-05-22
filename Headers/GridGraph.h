@@ -18,11 +18,13 @@ public:
             bool isValid(const GridGraph* const graph);
             GridGraph::Cell::Coord operator+(const GridGraph::Cell::Coord) const;
         };
-        Cell(const int32_t x, const int32_t y, GridGraph* graph);
+        Cell(const int32_t x, const int32_t y, double cost, GridGraph* graph);
         const Coord getCoord() const;
+        double getCost() const;
         void addAllNeighs(const GridGraph *graph, const double nodeCost);
     protected:
         Coord coord;
+        double cost;
     };
     GridGraph(int32_t width, int32_t height, const vector<vector<double>>* const nodeCosts);
     int32_t getWidth() const;

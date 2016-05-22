@@ -2,9 +2,10 @@
 #include <math.h>
 #include <iostream>
 
-GridGraph::Cell::Cell(const int32_t height, const int32_t width, GridGraph* graph):
+GridGraph::Cell::Cell(const int32_t height, const int32_t width, double cost, GridGraph* graph):
         Graph::Node(uint64_t(height) * graph->getWidth() + uint64_t(width)),
-        coord(Coord(height, width)) {
+        coord(Coord(height, width)),
+        cost(cost){
 }
 
 const GridGraph::Cell::Coord GridGraph::Cell::getCoord() const {
@@ -16,6 +17,10 @@ void GridGraph::Cell::addAllNeighs(const GridGraph *graph, const double nodeCost
     for (auto neig : neighs) {
         neig->addEdge(this, nodeCost, EdgeType::BiDirect);
     }
+}
+
+double GridGraph::Cell::getCost() const {
+    return cost;
 }
 
 bool GridGraph::Cell::Coord::isValid(const GridGraph * const graph) {
@@ -42,12 +47,13 @@ const vector<GridGraph::Cell*> GridGraph::getAllValidNeighs(GridGraph::Cell* con
 GridGraph::GridGraph(int32_t width, int32_t height, const vector<vector<double>>* const nodeCosts): Graph(),
                                                                                                     width(width),
                                                                                                     height(height) {
-    infiniteNode = new Cell(numeric_limits<int32_t>::max(), numeric_limits<int32_t>::max(), this);
+    infiniteNode = new Cell(numeric_limits<int32_t>::max(), numeric_limits<int32_t>::max(),
+                            numeric_limits<double>::infinity() ,this);
     nodes.reserve(height * width + 1);
     grid.assign(height, vector<Cell*>());
     for (int32_t i = 0; i < height; ++i) {
         for (int32_t j = 0; j < width; ++j) {
-            nodes.push_back(Cell(i, j, this));
+            nodes.push_back(Cell(i, j, (*nodeCosts)[i][j], this));
             grid[i].push_back(&nodes[i * width + j]);
         }
     }

@@ -15,10 +15,10 @@ XMLGridGraphParser::XMLGridGraphParser(const string path) {
     pugi::xml_node map = doc.child("root").child("map");
     width = strtoul(map.child_value("width"), NULL, 10);
     height = strtoul(map.child_value("height"), NULL, 10);
-    startHeight = strtoul(map.child_value("startx"), NULL, 10);
-    startWidth = strtoul(map.child_value("starty"), NULL, 10);
-    endHeight = strtoul(map.child_value("finishx"), NULL, 10);
-    endWidth = strtoul(map.child_value("finishy"), NULL, 10);
+    startHeight = strtoul(map.child_value("starty"), NULL, 10);
+    startWidth = strtoul(map.child_value("startx"), NULL, 10);
+    endHeight = strtoul(map.child_value("finishy"), NULL, 10);
+    endWidth = strtoul(map.child_value("finishx"), NULL, 10);
     pugi::xml_node rows = map.child("grid");
 
     grid.assign(height, vector<double>());

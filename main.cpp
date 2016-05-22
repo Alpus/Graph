@@ -8,6 +8,7 @@ using namespace std;
 #include "Headers/PathFinder.h"
 #include "Headers/XMLGridGraphParser.h"
 #include "Headers/Heuristic.h"
+#include "Headers/GridVisualizer.h"
 #include <iostream>
 using std::cin;
 using std::cout;
@@ -30,20 +31,7 @@ void readWeightedGraph(uint64_t* const nodeNumber, vector<tuple<uint64_t, uint64
 }
 
 int main() {
-//    freopen ("Inputs/graph_test","r", stdin);
-//    uint64_t n = 0;
-//    vector<tuple<uint64_t, uint64_t, double>> edges;
-//    readWeightedGraph(&n, &edges);
-//    Graph graph(n, edges);
-//    DijkstraSearch pathFinder(graph);
-//    pathFinder.findPath(*graph[0], *graph.getInfiniteNode());
-//    cout << pathFinder.getPathCost(*graph[4]) << endl;
-//    for (auto node: pathFinder.getFullPath(*graph[4])) {
-//        cout << node->getId() << " ";
-//    }
-
-    freopen ("Output","w", stdout);
-    XMLGridGraphParser data("/home/alpus/Work/Course_work/Implementation/Inputs/DragonAge-Starcraft-somemaps/Starcraft_movingai.com_/ArcticStation/3768988.xml");
+    XMLGridGraphParser data("/home/alpus/Work/Course_work/Implementation/Inputs/DragonAge-Starcraft-somemaps/Starcraft_movingai.com_/Cauldron/3796273.xml");
     GridGraph graph(data.getWidth(), data.getHeight(), data.getGrid());
     AStar pathFinder(&graph, Heuristic::chebyshevDistance);
 
@@ -51,10 +39,10 @@ int main() {
     const GridGraph::Cell* endCell = graph.getCellByCoords(data.getEndHeight(), data.getEndWidth());
     pathFinder.findPath(startCell, endCell);
 
-    cout << *pathFinder.getPathCost(endCell) << endl;
-    for (auto node: pathFinder.getFullPath(endCell)) {
-        cout << node->getId() << " ";
-    }
-    cout << endl;
+    GridVisualizer map(&graph);
+    const vector<const Graph::Node*> path = pathFinder.getFullPath(endCell);
+    map.addPath(&path);
+    map.drawImage();
+
     return 0;
 }
