@@ -15,7 +15,13 @@ const GridGraph::Cell::Coord GridGraph::Cell::getCoord() const {
 void GridGraph::Cell::addAllNeighs(const GridGraph *graph, const double nodeCost) {
     const vector<GridGraph::Cell*> neighs = graph->getAllValidNeighs(this);
     for (auto neig : neighs) {
-        neig->addEdge(this, nodeCost, EdgeType::BiDirect);
+        if (neig->coord.height - this->coord.height != 0 &&
+            neig->coord.width - this->coord.width != 0 &&
+            nodeCost != numeric_limits<double>::infinity()) {
+            neig->addEdge(this, nodeCost * double(1.4), EdgeType::BiDirect); // 1.4 For big accuracy ~ sqrt(2)
+        } else {
+            neig->addEdge(this, nodeCost, EdgeType::BiDirect);
+        }
     }
 }
 

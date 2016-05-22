@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <set>
+#include <math.h>
 
 using std::set;
 using std::reverse;
@@ -45,7 +46,7 @@ const vector<const Graph::Node*> HeuristicSearch::getFullPath(const Graph::Node*
 
                 destNode = edgeIter->getDest();
                 destCost = *costs[destNode];
-                if (*costs[curNode] - edgeIter->getCost() == destCost) {
+                if (std::abs(*costs[curNode] - edgeIter->getCost() - destCost) < 0.01) {
                     pathOrder.push_back(destNode);
                     curNode = destNode;
                     break;
@@ -129,7 +130,7 @@ void HeuristicSearch::findPath(const Graph::Node* const begin, const Graph::Node
                 }
 
                 if (newNode < oldNode) {
-                    open.erase(oldNode);
+                    open.find(oldNode);
                     *costs[curDest] = getMinCost(&edgeIter);
                     open.insert(newNode);
                 }
