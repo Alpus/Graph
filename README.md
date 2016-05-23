@@ -193,14 +193,14 @@ To use some path finder you need to call constructor of needed class.
 
 Allowed classes:
 
- DijkstraSearch:
+DijkstraSearch:
   * Constructor: `DijkstraSearch(Graph*)`.
   * **No negative loops**
   * Min cost path.
   * From one to all.
-  * O(E log(N)) 
-  
- AStar:
+  * O(E log(N))
+
+AStar:
   * Constructor: `AStar(Gridraph*, heuristic_function)`. As a second argument you can use on of the function from Heuristic class. For example `Heuristic::manhattanDistance`;
   * **No negative loops**
   * Min cost path.
